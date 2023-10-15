@@ -58,10 +58,11 @@ def restore_changes(file, cursor, committed_transactions):
         # Confere se o valor que esta no arquivo é diferente do valor que está no BD
         if(int(values[3]) != tuple):
           cursor.execute('UPDATE data SET ' + values[1] + ' = ' + values[3] + ' WHERE id = ' + values[0])
+          ## dúvida aqui
           print_update(transaction, tuple, values)
 
 
-def log_redo(cursor):
+def log_undo(cursor):
   # Abre arquivo da entradaLog apenas para leitura
   file = open('test_files/entradaLog', 'r')
 
@@ -73,7 +74,7 @@ def log_redo(cursor):
     committed_transactions = find_committed_transations(file)
 
     # Restaurar mudanças feitas nas transições committadas
-    restore_changes(file, cursor, committed_transactions)
+    undo_changes(file, cursor, committed_transactions)
 
     # Imprime saída
     print_transactions(checkpoint_transactions, committed_transactions)
