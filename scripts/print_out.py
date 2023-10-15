@@ -19,14 +19,14 @@ def print_transactions(checkpoint_transactions, committed_transactions):
   # Imprime transactions que foram commitadas
   if not checkpoint_transactions:
     for transaction in committed_transactions:
-      print('TRANSAÇÃO '+ transaction +': realizou Redo')
+      print('TRANSAÇÃO '+ transaction +': realizou Undo')
 
-  # Imprime transações do checkpoint que realizaram ou não o Redo
+  # Imprime transações do checkpoint que realizaram ou não o Undo
   for transaction in checkpoint_transactions:
     if(transaction in committed_transactions):
-      print('TRANSAÇÃO '+ transaction +': realizou Redo')
+      print('TRANSAÇÃO '+ transaction +': realizou Undo')
     else:
-      print('TRANSAÇÃO '+ transaction +': não realizou Redo')
+      print('TRANSAÇÃO '+ transaction +': não realizou Undo')
 
 
 def print_json(cursor):
