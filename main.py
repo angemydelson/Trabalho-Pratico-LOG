@@ -4,7 +4,7 @@ import psycopg2
 # Scrips desenvolvidos para o projeto
 from scripts.db_config import db_config
 from scripts.load_database import load_database
-from scripts.log_redo import log_redo
+from scripts.log_undo import log_undo
 
 def main():
   conn = None
@@ -17,8 +17,8 @@ def main():
 	  # carrega o banco com dados do arquivo
     load_database(cursor)
 
-    # recuperar log REDO
-    log_redo(cursor)
+    # recuperar log UNDO
+    log_undo(cursor)
 
 	  # fecha conexão com banco
     cursor.close()
