@@ -53,8 +53,12 @@
    - 1.1 [Ferramentas Utilizadas](#ancora1-1)
    
 ### 2. [Evolução do Projeto](#ancora2)
-   - 2.1 [](#ancora2-1)
-   - 2.2 [](#ancora2-2)
+   - 2.1 [Inicialização do Banco de Dados](#ancora2-1)
+   - 2.2 [Carregamento do Arquivo de Log](#ancora2-2)
+   - 2.3 [Identificação das Transações para UNDO](#ancora2-3)
+   - 2.4 [Verificação e Atualização de Valores](#ancora2-4)
+   - 2.5 [Relatório de Atualizações](#ancora2-5)
+   - 2.6 [Execução do UNDO](#ancora2-6)
 
 ### 3. [Estrutura de Diretórios](#ancora3)
 
@@ -67,7 +71,7 @@
 
 <a id="ancora1"></a>
 ## 1. Propósito
-
+- O objetivo geral deste trabalho é implementar um mecanismo de log Undo com checkpoint usando um Sistema de Gerenciamento de Banco de Dados (SGBD). O trabalho consiste em desenvolver um código capaz de ler um arquivo de log e um arquivo de metadados, validar as informações no banco de dados por meio do modelo UNDO
 ---
 
 <a id="ancora1-1"></a>
@@ -87,14 +91,38 @@
 
 <a id="ancora2-1"></a>
 #### 2.1 
+  - Carregar o banco de dados com a tabela antes de executar o código do log, com o propósito de zerar as configurações e dados parciais. A tabela pode ter um número diferente de colunas e linhas.
 #### 2.2 
+  - Carregar o arquivo de log que contém informações sobre as transações realizadas no banco de dados.
+#### 2.3 
+  - Verificar quais transações devem realizar o UNDO e imprimir o nome das transações que irão sofrer UNDO.
+#### 2.4 
+  - Checar quais valores estão salvos nas tabelas por meio de operações de SELECT e atualizar os valores inconsistentes por meio de operações de UPDATE.
+#### 2.5 
+  - Reportar quais dados foram atualizados no banco de dados.
+#### 2.6
+  - Seguir o fluxo de execução conforme o método de UNDO, conforme discutido em aulas anteriores, garantindo que as transações sejam revertidas para seus estados anteriores.
 
-<!-- Detalhes sobre a contrução de v1/vision e resultados aqui -->
-  -
 
 <a id="ancora3"></a>
 ## 3. Estrutura de Diretórios
-
+* ```scripts```
+    * ```__init__.py```
+    * ```db_config.py```
+    * ```load_database.py```
+    * ```log_undo.py```
+    * ```print_out.py```
+* ```Assets```
+    * ```postgresSQL.png```
+    * ```SGBD.png```
+* ```test_files```
+    * ```entradaLog.txt```
+    * ```metadado.json```
+* ```.gitignore```
+* ```README.md```
+* ```database.ini```
+* ```main.py```
+* ```LICENSE```
 
 ***
 
@@ -104,7 +132,7 @@
 ## 4. Infraestrutura do projeto
 
 <div align="center">
-  <img src="" alt="Arquitetura do projeto" width="60%">
+  <img src="./Assets/arquitetura.png" alt="Arquitetura do projeto" width="30%">
 </div>
 
 ---
@@ -113,6 +141,6 @@
 ## 5. Desafios Enfrentados
 
 <!-- Desafios enfrentados durante o desenvolvimento -->
-- 
+- Desafios enfrentados: Tivemos algumas dificuldades ao implementar a função undo_changes, pois estava apresentando erros.
 
 ---
