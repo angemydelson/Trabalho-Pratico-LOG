@@ -26,7 +26,7 @@
       <td align="center">
         <a href="https://github.com/Jacquet12">
           <img src="https://avatars.githubusercontent.com/u/100454337?v=4" width="100px;" alt="Foto do Jacquet Leme"/><br>
-          <sub><b>Gregory Jasson Pitthan</b></sub>
+          <sub><b>Jacquet Leme</b></sub>
         </a>
       </td>
     </tr>
