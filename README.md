@@ -141,6 +141,6 @@
 ## 5. Desafios Enfrentados
 
 <!-- Desafios enfrentados durante o desenvolvimento -->
-- Desafios enfrentados: Tivemos algumas dificuldades ao implementar a função undo_changes, pois estava apresentando erros.
+- Tivemos algumas dificuldades ao implementar a função undo_changes, pois estava apresentando erros.
 
 ---
