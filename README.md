@@ -104,6 +104,27 @@
   - Seguir o fluxo de execução conforme o método de UNDO, conforme discutido em aulas anteriores, garantindo que as transações sejam revertidas para seus estados anteriores.
 
 
+Arquivo de log no formato **<transação, “id da tupla”,”coluna”, “valor antigo”, “valor novo”>**
+
+## Exemplo
+Arquivo de Metadado (json):
+
+<div align="center">
+  <img src="./Assets/metadado.png" alt="metadado" width="20%">
+</div>
+
+Arquivo de Log:
+
+<div align="center">
+  <img src="./Assets/log.png" alt="metadado" width="20%">
+</div>
+
+Saída:
+
+<div align="center">
+  <img src="./Assets/saida.png" alt="metadado" width="50%">
+</div>
+
 <a id="ancora3"></a>
 ## 3. Estrutura de Diretórios
 * ```scripts```

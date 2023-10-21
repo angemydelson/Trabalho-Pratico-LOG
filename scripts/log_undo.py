@@ -2,19 +2,22 @@
 import re
 
 # Scripts para impressão
-from scripts.print_out import print_transactions, print_json, print_update
+from scripts.print_out import print_undo_transactions, print_json, print_update
+
 
 def find_checkpoint(file):
   # Encontrando o checkpoint e salvando as transações que ainda não terminaram
-  matches = re.findall('<CKPT \((.+?)\)>', file.read())
+  matches = re.findall(r'<START CKPT\((.+?)\)>', file.read())
   # Retorna transações do último checkpoint, se não tiver retorna array vazio
   return matches[-1].split(',') if matches else []
+
+#def dump_log(file, cursor, committed_transactions):
 
 def intersection(lst1, lst2):
     lst3 = [value for value in lst1 if value not in lst2]
     return lst3
 
-def find_committed_transations(file):
+def find_committed_transactions(file):
   transactions = []
 
   # Retona pra início do arquivo
@@ -23,7 +26,7 @@ def find_committed_transations(file):
   # Percorre arquivo de baixo pra cima
   for line in reversed( list(file) ):
     # Só vai percorrer até encontrar um checkpoint
-    if ("CKPT" in line): break
+    #if ("CKPT" in line): break
 
     matches = re.search('<commit (.+?)>', line)
     # Se encontra commit, adiciona transição na lista
@@ -33,8 +36,29 @@ def find_committed_transations(file):
   # Retorna transações em ordem de commit
   return transactions[::-1]
 
-def undo_changes(file, cursor, committed_transactions, checkpoint_transactions):
-  uncommitted_transactions = intersection(checkpoint_transactions, committed_transactions)
+
+def find_started_transactions(file):
+  transactions = []
+
+  # Retona pra início do arquivo
+  file.seek(0)
+
+  # Percorre arquivo de baixo pra cima
+  for line in reversed( list(file) ):
+    # Só vai percorrer até encontrar um checkpoint
+    if ("END CKPT" in line): break
+
+    matches = re.search('<start (.+?)>', line)
+    # Se encontra commit, adiciona transição na lista
+    if matches:
+      transactions.append(matches.group(1))
+
+  # Retorna transações em ordem de commit
+  return transactions[::-1]
+
+
+def undo_changes(file, cursor, committed_transactions, started_transactions):
+  uncommitted_transactions = intersection(started_transactions, committed_transactions)
   # Percorre transações commitadas
   for transaction in uncommitted_transactions:
     #print(transaction)
@@ -61,9 +85,9 @@ def undo_changes(file, cursor, committed_transactions, checkpoint_transactions):
         tuple = cursor.fetchone()[0]
 
         # Confere se o valor da antigo da coluna é diferente do que tem no banco
-        #if(int(values[2]) != tuple):
-        cursor.execute('UPDATE data SET ' + values[1] + ' = ' + values[2] + ' WHERE id = ' + values[0])
-        #print_update(transaction, tuple, values)
+        if(int(values[2]) != tuple):
+          cursor.execute('UPDATE data SET ' + values[1] + ' = ' + values[2] + ' WHERE id = ' + values[0])
+          print_update(transaction, tuple, values)
 
 
 
@@ -75,14 +99,20 @@ def log_undo(cursor):
     # Pega transações presentes no último checkpoint
     checkpoint_transactions = find_checkpoint(file)
 
+    # Pega transações startadas
+    started_transactions = find_started_transactions(file)
+
     # Pega transições que foram committadas após o checkpoint
-    committed_transactions = find_committed_transations(file)
+    committed_transactions = find_committed_transactions(file)
 
-    # Restaurar mudanças feitas nas transições committadas
-    undo_changes(file, cursor, committed_transactions, checkpoint_transactions)
+    print_update
+    print("UNDO 🤷🤷🤷👌👌👌:")
+    print_undo_transactions(started_transactions, committed_transactions, checkpoint_transactions)
+    print()
+    undo_changes(file, cursor, committed_transactions, started_transactions)
 
-    # Imprime saída
-    print_transactions(checkpoint_transactions, committed_transactions)
+    print("")
+    print("Estado Atual dos Dados:")
     print_json(cursor)
 
   finally:

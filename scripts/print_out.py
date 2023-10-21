@@ -4,29 +4,24 @@ def new_line():
 def print_update(transaction, old_value, log_values):
   row = log_values[0]
   column = log_values[1]
-  new_value = log_values[3]
+  new_value = log_values[2]
 
   print('TRANSAÇÃO '+ transaction +': No registro '+ row +', a coluna ' + column +' estava ' + str(old_value) + ' e no log atualizou para ' + new_value)
 
-def print_transactions(checkpoint_transactions, committed_transactions):
-  new_line()
-
-  # Não tem transações commitadas
-  if not committed_transactions:
-    print('Não houve nenhuma alteração no banco')
-    return
-
-  # Imprime transactions que foram commitadas
-  if not checkpoint_transactions:
-    for transaction in committed_transactions:
-      print('TRANSAÇÃO '+ transaction +': realizou Undo')
-
+    
+def print_undo_transactions(started_transactions, committed_transactions, checkpoint_transactions):
   # Imprime transações do checkpoint que realizaram ou não o Undo
-  for transaction in checkpoint_transactions:
-    if(transaction in committed_transactions):
-      print('TRANSAÇÃO '+ transaction +': realizou Undo')
-    else:
-      print('TRANSAÇÃO '+ transaction +': não realizou Undo')
+  # print(started_transactions)
+  # print(committed_transactions)
+  # print(checkpoint_transactions)
+  new_line()
+  for transaction in started_transactions:
+      if transaction not in committed_transactions:
+          if transaction in checkpoint_transactions:
+              print('TRANSAÇÃO ' + transaction + ': realizou Undo com checkpoint')
+          else:
+              print('TRANSAÇÃO ' + transaction + ': realizou Undo')
+
 
 
 def print_json(cursor):
@@ -45,7 +40,7 @@ def print_json(cursor):
 
   print('''
     {
-      "INITIAL": {
+      "TABLE": {
         "id": '''+ str(id)[1:-1] +''',
         "A: '''+ str(a)[1:-1] +''',
         "B": '''+ str(b)[1:-1] +'''
