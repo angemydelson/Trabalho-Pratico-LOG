@@ -60,7 +60,7 @@ def find_started_transactions(file):
 def undo_changes(file, cursor, committed_transactions, started_transactions):
   uncommitted_transactions = intersection(started_transactions, committed_transactions)
   # Percorre transações commitadas
-  for transaction in uncommitted_transactions:
+  for transaction in reversed(uncommitted_transactions):
     #print(transaction)
     # Retorna pra início do arquivo
     file.seek(0)
